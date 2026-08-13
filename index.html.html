@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zeus | Ede Miracle Obinna — Cybersecurity &amp; Video Editing Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a1010;
+    --panel:#101917;
+    --panel-2:#0d1513;
+    --line: #1e2b28;
+    --text:#dbe6e2;
+    --muted:#7f958f;
+    --sec:#ffb454;
+    --sec-dim: rgba(255,180,84,0.14);
+    --edit:#ff5f7e;
+    --edit-dim: rgba(255,95,126,0.14);
+    --accent: var(--sec);
+    --accent-dim: var(--sec-dim);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+    transition: background .4s ease;
+  }
+  body[data-mode="edit"]{ --accent: var(--edit); --accent-dim: var(--edit-dim); }
+
+  ::selection{ background:var(--accent); color:#0a1010; }
+
+  .mono{ font-family:'JetBrains Mono', monospace; }
+
+  a{ color:inherit; }
+
+  /* scanline overlay */
+  .scan{
+    position:fixed; inset:0; pointer-events:none; z-index:50;
+    background: repeating-linear-gradient(180deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 3px);
+    mix-blend-mode: overlay;
+  }
+
+  header.boot{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding: 6vh 6vw;
+    border-bottom:1px solid var(--line);
+    position:relative;
+    overflow:hidden;
+  }
+  header.boot::before{
+    content:"";
+    position:absolute; inset:0;
+    background: radial-gradient(ellipse at 15% 10%, var(--accent-dim), transparent 55%);
+    transition: background .5s ease;
+    pointer-events:none;
+  }
+  .boot-log{
+    font-size: 0.78rem;
+    color: var(--muted);
+    white-space:pre-wrap;
+    min-height: 5.4em;
+    margin-bottom: 2.2rem;
+    border-left: 2px solid var(--line);
+    padding-left: 1rem;
+  }
+  .boot-log .cursor{
+    display:inline-block; width:8px; height:1em; background:var(--accent);
+    vertical-align:-2px; animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  .hero-name{
+    font-family:'JetBrains Mono', monospace;
+    font-weight:800;
+    font-size: clamp(2.6rem, 8vw, 5.4rem);
+    line-height:0.98;
+    margin:0;
+    letter-spacing:-0.02em;
+  }
+  .hero-role{
+    font-size: clamp(1rem, 2.4vw, 1.35rem);
+    color: var(--accent);
+    margin: 0.9rem 0 0.4rem;
+    font-weight:600;
+    transition: color .4s ease;
+  }
+  .hero-sub{
+    color: var(--muted);
+    max-width: 640px;
+    font-size: 1rem;
+    margin-top: 0.6rem;
+  }
+
+  .switch-wrap{
+    position: fixed; top: 1.6rem; right: 1.6rem; z-index: 60;
+    display:flex; align-items:center; gap:0.6rem;
+    background: rgba(10,16,16,0.7);
+    border:1px solid var(--line);
+    padding: 0.5rem 0.8rem;
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+  }
+  .switch-label{ font-family:'JetBrains Mono',monospace; font-size:0.65rem; color:var(--muted); letter-spacing:0.06em; }
+  .switch-label.active{ color: var(--accent); }
+  .rocker{
+    width:46px; height:24px; border-radius:999px;
+    background: var(--panel-2); border:1px solid var(--line);
+    position:relative; cursor:pointer;
+  }
+  .rocker .knob{
+    position:absolute; top:2px; left:2px;
+    width:18px; height:18px; border-radius:50%;
+    background: var(--accent);
+    transition: left .3s ease, background .3s ease;
+    box-shadow: 0 0 10px var(--accent);
+  }
+  body[data-mode="edit"] .rocker .knob{ left: 24px; }
+
+  section{ padding: 6.5rem 6vw; border-bottom:1px solid var(--line); }
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.75rem;
+    color: var(--accent);
+    letter-spacing:0.06em;
+    margin-bottom:1rem;
+    transition: color .4s ease;
+  }
+  .eyebrow::before{ content:"$ "; color: var(--muted); }
+  h2.section-title{
+    font-family:'JetBrains Mono', monospace;
+    font-size: clamp(1.6rem, 3.4vw, 2.4rem);
+    font-weight:700;
+    margin:0 0 2.4rem;
+    max-width: 800px;
+  }
+
+  .grid{ display:grid; gap:1.2rem; }
+  .grid.cols-3{ grid-template-columns: repeat(3, 1fr); }
+  .grid.cols-2{ grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 860px){
+    .grid.cols-3{ grid-template-columns: 1fr; }
+    .grid.cols-2{ grid-template-columns: 1fr; }
+  }
+
+  .card{
+    background: var(--panel);
+    border:1px solid var(--line);
+    padding: 1.6rem;
+    border-radius: 6px;
+  }
+
+  .tool{
+    display:flex; justify-content:space-between; align-items:center;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .tool:last-child{ border-bottom:none; }
+  .tool-name{ font-family:'JetBrains Mono', monospace; font-weight:600; font-size:0.95rem; }
+  .tool-desc{ color:var(--muted); font-size:0.82rem; margin-top:0.2rem; }
+  .bar{
+    width: 130px; height: 5px; background: var(--panel-2);
+    border-radius: 999px; overflow:hidden; flex-shrink:0; margin-left:1rem;
+  }
+  .bar-fill{ height:100%; background: var(--accent); transition: background .4s ease; }
+
+  .proj-title{ font-family:'JetBrains Mono', monospace; font-weight:700; font-size:1rem; margin-bottom:0.5rem; color: var(--accent); transition: color .4s ease;}
+  .proj-desc{ color: var(--muted); font-size:0.88rem; }
+  .tag-row{ margin-top:0.9rem; display:flex; flex-wrap:wrap; gap:0.4rem; }
+  .tag{
+    font-family:'JetBrains Mono', monospace; font-size:0.68rem;
+    border:1px solid var(--line); color:var(--muted);
+    padding: 0.2rem 0.5rem; border-radius:4px;
+  }
+
+  .exp-row{
+    display:grid; grid-template-columns: 160px 1fr; gap:1.5rem;
+    padding: 1.8rem 0; border-bottom:1px solid var(--line);
+  }
+  .exp-row:last-child{ border-bottom:none; }
+  @media (max-width:700px){ .exp-row{ grid-template-columns:1fr; gap:0.5rem; } }
+  .exp-period{ font-family:'JetBrains Mono', monospace; color:var(--muted); font-size:0.82rem; }
+  .exp-role{ font-weight:700; font-size:1.05rem; }
+  .exp-org{ color: var(--accent); font-weight:600; font-size:0.92rem; margin-bottom:0.5rem; transition: color .4s ease;}
+  .exp-desc{ color:var(--muted); font-size:0.9rem; }
+
+  .edu-card{
+    border-left: 2px solid var(--accent);
+    padding-left:1.4rem;
+    margin-bottom: 2rem;
+    transition: border-color .4s ease;
+  }
+  .edu-school{ font-weight:700; font-size:1.1rem; }
+  .edu-detail{ color:var(--muted); font-size:0.9rem; margin-top:0.3rem; }
+
+  footer{
+    padding: 5rem 6vw 4rem;
+    text-align:center;
+  }
+  footer .hero-name{ font-size: clamp(2rem, 6vw, 3.2rem); }
+  .contact-links{
+    display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-top:2rem;
+  }
+  .contact-links a{
+    font-family:'JetBrains Mono', monospace; font-size:0.85rem;
+    border:1px solid var(--line); padding:0.7rem 1.3rem; border-radius:4px;
+    text-decoration:none; color:var(--text); transition: all .25s ease;
+  }
+  .contact-links a:hover{ border-color:var(--accent); color:var(--accent); }
+
+  .mode-note{
+    font-family:'JetBrains Mono', monospace; font-size:0.78rem;
+    color: var(--muted); margin-top: 2.6rem; max-width:640px;
+  }
+  .mode-note span{ color:var(--accent); transition: color .4s ease; }
+
+  ::-webkit-scrollbar{ width:10px; }
+  ::-webkit-scrollbar-track{ background:var(--bg); }
+  ::-webkit-scrollbar-thumb{ background:var(--line); border-radius:10px; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+
+  :focus-visible{ outline: 2px solid var(--accent); outline-offset:3px; }
+</style>
+</head>
+<body data-mode="sec">
+<div class="scan"></div>
+
+<div class="switch-wrap">
+  <span class="switch-label active" id="labelSec">SEC</span>
+  <div class="rocker" id="rocker" role="button" tabindex="0" aria-label="Toggle between security mode and editing mode">
+    <div class="knob"></div>
+  </div>
+  <span class="switch-label" id="labelEdit">EDIT</span>
+</div>
+
+<header class="boot">
+  <div class="boot-log mono" id="bootLog"></div>
+  <h1 class="hero-name">ZEUS</h1>
+  <div class="hero-role" id="heroRole">Cybersecurity Practitioner &amp; Mobile Video Editor</div>
+  <p class="hero-sub">Ede Miracle Obinna. Based in Abuja, Nigeria, relocating to Fredericton, New Brunswick for a Master of Computer Science at UNB. I secure systems and I cut stories, sometimes in the same week.</p>
+  <p class="mode-note" id="modeNote">Currently viewing in <span>SECURITY MODE</span>. Flip the switch above to see the editing side.</p>
+</header>
+
+<section id="about">
+  <div class="eyebrow">whoami</div>
+  <h2 class="section-title">A security minded builder who also tells stories on a timeline</h2>
+  <p style="max-width:720px;color:var(--muted);">
+    I am a Computer Science graduate who splits my attention between two disciplines that most people keep apart. On one side, I test systems for weaknesses, script small security tools, and study how networks actually behave under attack. On the other, I sit with raw footage on a phone and cut it into something people want to watch. Both sides need the same instinct, notice what is out of place, then fix it.
+  </p>
+</section>
+
+<section id="security-skills">
+  <div class="eyebrow">ls -la ./skills/security</div>
+  <h2 class="section-title">Tools I use to find and fix weaknesses</h2>
+  <div class="card">
+    <div class="tool">
+      <div><div class="tool-name">Nmap</div><div class="tool-desc">Network scanning, host discovery, service and version enumeration</div></div>
+      <div class="bar"><div class="bar-fill" style="width:90%"></div></div>
+    </div>
+    <div class="tool">
+      <div><div class="tool-name">Metasploit</div><div class="tool-desc">Exploitation framework for testing known vulnerabilities in controlled labs</div></div>
+      <div class="bar"><div class="bar-fill" style="width:78%"></div></div>
+    </div>
+    <div class="tool">
+      <div><div class="tool-name">Hydra</div><div class="tool-desc">Login brute force testing across protocols to assess password policy strength</div></div>
+      <div class="bar"><div class="bar-fill" style="width:75%"></div></div>
+    </div>
+    <div class="tool">
+      <div><div class="tool-name">Burp Suite</div><div class="tool-desc">Web application proxy for intercepting, testing and analyzing HTTP traffic</div></div>
+      <div class="bar"><div class="bar-fill" style="width:85%"></div></div>
+    </div>
+    <div class="tool">
+      <div><div class="tool-name">Wireshark</div><div class="tool-desc">Packet capture and protocol analysis for diagnosing network behavior</div></div>
+      <div class="bar"><div class="bar-fill" style="width:82%"></div></div>
+    </div>
+    <div class="tool">
+      <div><div class="tool-name">Kali Linux</div><div class="tool-desc">Primary operating environment for penetration testing and security exercises</div></div>
+      <div class="bar"><div class="bar-fill" style="width:92%"></div></div>
+    </div>
+    <div class="tool">
+      <div><div class="tool-name">Nikto &amp; DVWA</div><div class="tool-desc">Web server scanning and a deliberately vulnerable app for practicing exploitation safely</div></div>
+      <div class="bar"><div class="bar-fill" style="width:74%"></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="eyebrow">cat ./projects/security.log</div>
+  <h2 class="section-title">Projects built to understand security from the inside</h2>
+  <div class="grid cols-3">
+    <div class="card">
+      <div class="proj-title">Password Strength Checker</div>
+      <div class="proj-desc">A tool that scores password quality in real time against length, character variety and common pattern rules.</div>
+      <div class="tag-row"><span class="tag">Python</span><span class="tag">Regex</span></div>
+    </div>
+    <div class="card">
+      <div class="proj-title">Password Generator</div>
+      <div class="proj-desc">Generates strong random passwords with adjustable length and character sets for safer account creation.</div>
+      <div class="tag-row"><span class="tag">Python</span></div>
+    </div>
+    <div class="card">
+      <div class="proj-title">File Encryption Tool</div>
+      <div class="proj-desc">Encrypts and decrypts local files using symmetric encryption to protect sensitive data at rest.</div>
+      <div class="tag-row"><span class="tag">Cryptography</span></div>
+    </div>
+    <div class="card">
+      <div class="proj-title">Login Authentication System</div>
+      <div class="proj-desc">A working login system with hashed password storage, session handling and input validation.</div>
+      <div class="tag-row"><span class="tag">Auth</span><span class="tag">Sessions</span></div>
+    </div>
+    <div class="card">
+      <div class="proj-title">Two Factor Authentication</div>
+      <div class="proj-desc">Adds a second verification step to a login flow, reducing the impact of a stolen password.</div>
+      <div class="tag-row"><span class="tag">2FA</span><span class="tag">OTP</span></div>
+    </div>
+    <div class="card">
+      <div class="proj-title">Secure Password Manager</div>
+      <div class="proj-desc">Stores and retrieves account credentials in an encrypted local vault instead of plain text.</div>
+      <div class="tag-row"><span class="tag">Encryption</span></div>
+    </div>
+    <div class="card">
+      <div class="proj-title">Network Port Scanner</div>
+      <div class="proj-desc">Scans a target host for open ports and identifies which services are exposed and listening.</div>
+      <div class="tag-row"><span class="tag">Sockets</span><span class="tag">Networking</span></div>
+    </div>
+    <div class="card">
+      <div class="proj-title">IP Address Information Finder</div>
+      <div class="proj-desc">Looks up geolocation, ISP and ownership details tied to a given IP address.</div>
+      <div class="tag-row"><span class="tag">APIs</span></div>
+    </div>
+    <div class="card">
+      <div class="proj-title">URL Safety Checker</div>
+      <div class="proj-desc">Checks a link against known indicators of phishing or malicious redirects before a user clicks it.</div>
+      <div class="tag-row"><span class="tag">Threat Intel</span></div>
+    </div>
+    <div class="card">
+      <div class="proj-title">Cisco Packet Tracer Network Designs</div>
+      <div class="proj-desc">Simulated enterprise network topologies covering routing, VLANs, ACLs and switch configuration.</div>
+      <div class="tag-row"><span class="tag">CCNA</span><span class="tag">Routing</span><span class="tag">VLANs</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="eyebrow">cat ./work/history.log</div>
+  <h2 class="section-title">Where I have put these skills to work</h2>
+  <div class="exp-row">
+    <div class="exp-period mono">Akovil Tech Limited</div>
+    <div>
+      <div class="exp-role">IT Support</div>
+      <div class="exp-org">Technical Support &amp; Systems</div>
+      <div class="exp-desc">Handled day to day IT support duties, troubleshooting systems and keeping technical operations running smoothly.</div>
+    </div>
+  </div>
+  <div class="exp-row">
+    <div class="exp-period mono">SEC Nigeria</div>
+    <div>
+      <div class="exp-role">IT Support</div>
+      <div class="exp-org">Securities and Exchange Commission</div>
+      <div class="exp-desc">Provided IT support within a regulatory institution, supporting staff systems and maintaining technical reliability in a formal, security conscious environment.</div>
+    </div>
+  </div>
+  <div class="exp-row">
+    <div class="exp-period mono">GIZ</div>
+    <div>
+      <div class="exp-role">IT Support &amp; Video Editor</div>
+      <div class="exp-org">Deutsche Gesellschaft fur Internationale Zusammenarbeit</div>
+      <div class="exp-desc">Combined both sides of my skill set, supporting IT needs while also producing edited video content for the organization.</div>
+    </div>
+  </div>
+</section>
+
+<section id="editing">
+  <div class="eyebrow">rec ./editing/reel</div>
+  <h2 class="section-title">On the video side, I edit professionally on my phone</h2>
+  <p style="max-width:720px;color:var(--muted);margin-bottom:2rem;">
+    My main tool is CapCut, and my main device is my phone. Working this way has pushed me to be fast and precise with cuts, pacing, captions and sound design, without needing a desktop setup. I have edited under the name Zeus Reel for social media, corporate, event and promotional clients, along with content for church and community pages.
+  </p>
+  <div class="grid cols-2">
+    <div class="card">
+      <div class="proj-title">Mobile First Workflow</div>
+      <div class="proj-desc">Full edits, from raw clips to captions, transitions and export, done entirely on a phone using CapCut.</div>
+    </div>
+    <div class="card">
+      <div class="proj-title">Content Range</div>
+      <div class="proj-desc">Social media reels, corporate clips, event recaps, promotional videos and church content.</div>
+    </div>
+    <div class="card">
+      <div class="proj-title">Cooking Content</div>
+      <div class="proj-desc">Edited cooking and food content, including work that led directly to a Content and Animation Assistant role.</div>
+    </div>
+    <div class="card">
+      <div class="proj-title">Zeus Reel</div>
+      <div class="proj-desc">A personal brand name I use for video editing services and client work.</div>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="eyebrow">cat ./education.txt</div>
+  <h2 class="section-title">Education and certifications</h2>
+  <div class="edu-card">
+    <div class="edu-school">Master of Computer Science (Coursework)</div>
+    <div class="edu-detail">University of New Brunswick, Fredericton. Faculty of Computer Science. Starting September 2026.</div>
+  </div>
+  <div class="edu-card">
+    <div class="edu-school">BSc, Computer Science</div>
+    <div class="edu-detail">Veritas University, Abuja.</div>
+  </div>
+  <div class="edu-card">
+    <div class="edu-school">Cisco Cybersecurity Certifications</div>
+    <div class="edu-detail">Coursework covering networking fundamentals, security operations and defensive practices.</div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="eyebrow" style="justify-content:center;display:inline-block;">./contact</div>
+  <h2 class="hero-name">Let's talk</h2>
+  <p style="color:var(--muted);max-width:520px;margin:1rem auto 0;">Open to cybersecurity roles, IT support work and video editing projects. Reach out below.</p>
+  <div class="contact-links">
+    <a href="mailto:youremail@example.com">Email</a>
+    <a href="#">LinkedIn</a>
+    <a href="#">GitHub</a>
+    <a href="#">Instagram</a>
+  </div>
+</footer>
+
+<script>
+  const bootLines = [
+    "ZEUS_OS v1.0 booting...",
+    "loading profile: Ede Miracle Obinna",
+    "mounting /skills/security ... ok",
+    "mounting /skills/editing ... ok",
+    "location: Abuja, NG -> Fredericton, NB",
+    "status: ready"
+  ];
+  const logEl = document.getElementById('bootLog');
+  let li = 0;
+  function typeLine(){
+    if(li >= bootLines.length){
+      logEl.innerHTML += '<span class="cursor"></span>';
+      return;
+    }
+    const line = bootLines[li];
+    let ci = 0;
+    const interval = setInterval(()=>{
+      logEl.textContent = bootLines.slice(0, li).join("\n") + (li>0 ? "\n" : "") + line.slice(0, ci+1);
+      ci++;
+      if(ci >= line.length){
+        clearInterval(interval);
+        li++;
+        setTimeout(typeLine, 120);
+      }
+    }, 18);
+  }
+  typeLine();
+
+  const rocker = document.getElementById('rocker');
+  const body = document.body;
+  const labelSec = document.getElementById('labelSec');
+  const labelEdit = document.getElementById('labelEdit');
+  const heroRole = document.getElementById('heroRole');
+  const modeNote = document.getElementById('modeNote');
+
+  const roles = {
+    sec: "Cybersecurity Practitioner &amp; Mobile Video Editor",
+    edit: "Mobile Video Editor &amp; Cybersecurity Practitioner"
+  };
+  const notes = {
+    sec: 'Currently viewing in <span>SECURITY MODE</span>. Flip the switch above to see the editing side.',
+    edit: 'Currently viewing in <span>EDIT MODE</span>. Flip the switch above to see the security side.'
+  };
+
+  function setMode(mode){
+    body.setAttribute('data-mode', mode);
+    labelSec.classList.toggle('active', mode === 'sec');
+    labelEdit.classList.toggle('active', mode === 'edit');
+    heroRole.innerHTML = roles[mode];
+    modeNote.innerHTML = notes[mode];
+  }
+
+  function toggleMode(){
+    const current = body.getAttribute('data-mode');
+    setMode(current === 'sec' ? 'edit' : 'sec');
+  }
+
+  rocker.addEventListener('click', toggleMode);
+  rocker.addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggleMode(); }
+  });
+  labelSec.addEventListener('click', ()=> setMode('sec'));
+  labelEdit.addEventListener('click', ()=> setMode('edit'));
+</script>
+
+</body>
+</html>
